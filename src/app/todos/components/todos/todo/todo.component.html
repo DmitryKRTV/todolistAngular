@@ -8,8 +8,9 @@
       autofocus
     />
     <ng-template #content>
-      <p (dblclick)="activateEditModeHandler()">{{ todo.title }}</p>
+      <B (dblclick)="activateEditModeHandler()">{{ todo.title }}</B>
     </ng-template>
-    <button (click)="removeTodoHandler()">-</button>
+    <button (click)="removeTodoHandler()">X</button>
   </div>
+  <todo-tasks [todoId]="todo.id"></todo-tasks>
 </div>
