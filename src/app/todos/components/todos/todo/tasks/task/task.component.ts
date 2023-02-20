@@ -17,6 +17,8 @@ export class TaskComponent {
   }>()
 
   taskStatusEnum = TaskStatusEnum
+  newTitle = ''
+  editMode = false
 
   removeTaskHandler() {
     this.removeTaskEvent.emit({ todoId: this.task.todoListId, taskId: this.task.id })
@@ -24,14 +26,32 @@ export class TaskComponent {
 
   changeTaskStatusHandler(event: MouseEvent) {
     const newStatus = (event.currentTarget as HTMLInputElement).checked
-    const model: UpdateTaskModel = {
+    this.changeTask({
       status: newStatus ? this.taskStatusEnum.completed : this.taskStatusEnum.active,
-      title: this.task.title,
+    })
+  }
+
+  activeEditModeHandler() {
+    this.editMode = true
+    this.newTitle = this.task.title
+  }
+
+  editTitleHandler() {
+    this.changeTask({ title: this.newTitle })
+    this.newTitle = ''
+    this.editMode = false
+  }
+
+  changeTask(patch: Partial<UpdateTaskModel>) {
+    const model: UpdateTaskModel = {
       completed: this.task.completed,
       startDate: this.task.startDate,
       priority: this.task.priority,
       description: this.task.description,
       deadline: this.task.deadline,
+      status: this.task.status,
+      title: this.task.title,
+      ...patch,
     }
     this.changeTaskEvent.emit({ todoId: this.task.todoListId, taskId: this.task.id, model })
   }
