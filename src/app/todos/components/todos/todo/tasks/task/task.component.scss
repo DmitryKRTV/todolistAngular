@@ -7,3 +7,13 @@
 .task-content {
   display: flex;
 }
+
+.completed-task {
+  opacity: 0.5;
+  text-decoration: line-through;
+}
+
+.input {
+  width: 100%;
+  border: 2px solid black;
+}

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
 import { environment } from '../../../environments/environment.development'
 import { BehaviorSubject, map } from 'rxjs'
-import { Todo } from '../models/todos.model'
+import { DomainTodo, FilterType, Todo } from '../models/todos.model'
 import { CommonResponse } from '../../core/models/core.model'
 
 @Injectable({
@@ -10,14 +10,22 @@ import { CommonResponse } from '../../core/models/core.model'
 })
 export class TodosService {
   url = environment.baseUrl
-  todos$ = new BehaviorSubject<Todo[]>([])
+  todos$ = new BehaviorSubject<DomainTodo[]>([])
 
   constructor(private http: HttpClient) {}
 
   getTodos() {
-    this.http.get<Todo[]>(`${this.url}/todo-lists`).subscribe(todos => {
-      this.todos$.next(todos)
-    })
+    this.http
+      .get<Todo[]>(`${this.url}/todo-lists`)
+      .pipe(
+        map(todos => {
+          const newTodos: DomainTodo[] = todos.map(tl => ({ ...tl, filter: 'all' }))
+          return newTodos
+        })
+      )
+      .subscribe((todos: DomainTodo[]) => {
+        this.todos$.next(todos)
+      })
   }
 
   addTodo(title: string) {
@@ -25,10 +33,11 @@ export class TodosService {
       .post<CommonResponse<{ item: Todo }>>(`${this.url}/todo-lists`, { title })
       .pipe(
         map(res => {
-          return [res.data.item, ...this.todos$.getValue()]
+          const newTodo: DomainTodo = { ...res.data.item, filter: 'all' }
+          return [newTodo, ...this.todos$.getValue()]
         })
       )
-      .subscribe(todos => {
+      .subscribe((todos: DomainTodo[]) => {
         this.todos$.next(todos)
       })
   }
@@ -61,5 +70,12 @@ export class TodosService {
       .subscribe(todos => {
         this.todos$.next(todos)
       })
+  }
+
+  changeFilter(data: { filter: FilterType; todoId: string }) {
+    const newTodos = this.todos$.getValue().map(todo => {
+      return todo.id === data.todoId ? { ...todo, filter: data.filter } : todo
+    })
+    this.todos$.next(newTodos)
   }
 }

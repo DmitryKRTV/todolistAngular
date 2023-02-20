@@ -18,3 +18,9 @@
   padding: 10px;
   border: 2px solid black;
 }
+
+.todos-box {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+}
