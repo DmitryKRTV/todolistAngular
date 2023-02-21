@@ -1,0 +1,32 @@
+.notification{
+  position: fixed;
+  top: 125px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 100;
+
+  .notification_item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    font-size: 12px;
+    line-height: 14px;
+
+    width: 420px;
+    margin-top: 20px;
+    padding: 11px 13px;
+
+    color: #FFFFFF;
+    border-radius: 2px;
+    background-color: gray;
+  }
+}
+
+.notification_item_success {
+  background-color: green;
+
+}
+.notification_item_error {
+  background-color: red;
+}

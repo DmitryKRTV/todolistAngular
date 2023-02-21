@@ -5,6 +5,7 @@ import { CoreRoutingModule } from './core-routing.module'
 import { HTTP_INTERCEPTORS } from '@angular/common/http'
 import { CredentialsInterceptor } from './interceptors/credentials.interceptor'
 import { AuthService } from './services/auth.service'
+import { NotificationService } from './services/notification.service'
 
 @NgModule({
   declarations: [],
@@ -12,6 +13,7 @@ import { AuthService } from './services/auth.service'
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: CredentialsInterceptor, multi: true },
     AuthService,
+    NotificationService,
   ],
 })
 export class CoreModule {}
