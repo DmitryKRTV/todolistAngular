@@ -1,1 +1,48 @@
-<p>login works!</p>
+<div class="box">
+  <h1>Login page</h1>
+  <form [formGroup]="loginFrom" (ngSubmit)="onLoginSubmit()" class="form">
+    <label>
+      Введите email
+      <input
+        id="email"
+        type="text"
+        formControlName="email"
+        required
+        [ngClass]="{
+          inputError: email!.invalid && (email!.dirty || email!.touched),
+          inputSuccess: email!.invalid
+        }"
+      />
+    </label>
+
+    <div *ngIf="email!.invalid && (email!.dirty || email!.touched)" class="error">
+      <div *ngIf="email!.errors?.['required']">email is required</div>
+      <div *ngIf="email!.errors?.['pattern']">Email pattern is invalid</div>
+    </div>
+
+    <label>
+      Введите password
+      <input
+        id="password"
+        type="text"
+        formControlName="password"
+        required
+        [ngClass]="{
+          inoutError: password!.invalid && (password!.dirty || password!.touched),
+          inputSuccess: password!.invalid
+        }"
+      />
+    </label>
+
+    <div *ngIf="password!.invalid && (password!.dirty || password!.touched)" class="error">
+      <div *ngIf="password!.errors?.['required']">password is required</div>
+      <div *ngIf="password!.errors?.['min']">Password must be more that 3 characters</div>
+    </div>
+
+    <label>
+      <input type="checkbox" formControlName="rememberMe" />
+    </label>
+
+    <button type="submit" [disabled]="loginFrom.invalid">Submit</button>
+  </form>
+</div>
